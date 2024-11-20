@@ -24,3 +24,5 @@ jobs:
         with:
           files: foo.txt
           tag_name: ${{ steps.generate_info.outputs.formatted_string }}
+          generate_release_notes: true
+
