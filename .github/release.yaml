@@ -1,0 +1,6 @@
+# .github/release.yml
+
+changelog:
+  categories:
+    - title: Exciting New Features 🎉
+
