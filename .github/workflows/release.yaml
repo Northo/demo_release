@@ -13,9 +13,14 @@ jobs:
         uses: actions/checkout@v4
       - name: make content
         run: echo "foo" > foo.txt
+      - name: Get ISO date and short hash
+        id: generate_info
+        run: |
+          ISO_DATE=$(date -u +%Y-%m-%d)
+          SHORT_HASH=$(git rev-parse --short HEAD)
+          echo "formatted_string=${ISO_DATE}-${SHORT_HASH}" >> $GITHUB_OUTPUT
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
           files: foo.txt
-          tag_name: bar
-
+          tag_name: ${{ steps.generate_info.outputs.formatted_string }}
