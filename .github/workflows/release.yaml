@@ -16,7 +16,7 @@ jobs:
       - name: Get ISO date and short hash
         id: generate_info
         run: |
-          ISO_DATE=$(date -u +%Y-%m-%d)
+          ISO_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
           SHORT_HASH=$(git rev-parse --short HEAD)
           echo "formatted_string=${ISO_DATE}-${SHORT_HASH}" >> $GITHUB_OUTPUT
       - name: Release
