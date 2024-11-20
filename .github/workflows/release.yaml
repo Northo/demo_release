@@ -11,19 +11,21 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: make content
-        run: echo "foo" > foo.txt
       - name: Get ISO date and short hash
         id: generate_info
         run: |
           ISO_DATE=$(date -u +%Y-%m-%d)
           # Count the number of commits for the current date
-          VERSION=$(git log --since="${ISO_DATE}T00:00:00Z" --until="${ISO_DATE}T23:59:59Z" --pretty=format:"%h" | wc -l)
-          echo "formatted_string=${ISO_DATE}_${VERSION}" >> $GITHUB_OUTPUT
+          SHORT_HASH=$(git rev-parse --short HEAD)
+          echo "formatted_string=${ISO_DATE}_${SHORT_HASH}" >> $GITHUB_OUTPUT
+      - name: make content
+        run: echo "foo" > foo.txt
+      - name: rename artifact
+        run: mv foo.txt foo-${{ steps.generate_info.outputs.formatted_string }}.txt
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
-          files: foo.txt
+          files: foo-*.txt
           tag_name: ${{ steps.generate_info.outputs.formatted_string }}
           generate_release_notes: true
 
