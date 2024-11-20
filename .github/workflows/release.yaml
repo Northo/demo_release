@@ -16,9 +16,10 @@ jobs:
       - name: Get ISO date and short hash
         id: generate_info
         run: |
-          ISO_DATE=$(date -u +"%Y-%m-%dT%H-%M-%SZ")
-          SHORT_HASH=$(git rev-parse --short HEAD)
-          echo "formatted_string=${ISO_DATE}-${SHORT_HASH}" >> $GITHUB_OUTPUT
+          ISO_DATE=$(date -u +%Y-%m-%d)
+          # Count the number of commits for the current date
+          VERSION=$(git log --since="${ISO_DATE}T00:00:00Z" --until="${ISO_DATE}T23:59:59Z" --pretty=format:"%h" | wc -l)
+          echo "formatted_string=${ISO_DATE}_${VERSION}" >> $GITHUB_OUTPUT
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
